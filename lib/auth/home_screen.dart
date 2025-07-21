@@ -389,14 +389,6 @@ class _HomeScreenContentState extends State<_HomeScreenContent> {
               const SizedBox(height: 20),
 
               // Grid Menu
-              Text(
-                'Menu Cepat',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
               const SizedBox(height: 15),
               GridView.count(
                 shrinkWrap: true,
@@ -407,24 +399,24 @@ class _HomeScreenContentState extends State<_HomeScreenContent> {
                 children: [
                   MenuGridItem(
                     icon: Icons.arrow_downward,
-                    title: 'Debit',
+                    title: 'Pendapatan',
                     color: Colors.red.shade400,
                     onTap: () {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const DebitScreen()));
+                              builder: (context) => const CreditScreen()));
                     },
                   ),
                   MenuGridItem(
                     icon: Icons.arrow_upward,
-                    title: 'Kredit',
+                    title: 'Pengeluaran',
                     color: Colors.green.shade400,
                     onTap: () {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const CreditScreen()));
+                              builder: (context) => const DebitScreen()));
                     },
                   ),
                   MenuGridItem(

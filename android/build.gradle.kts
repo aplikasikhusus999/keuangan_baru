@@ -1,17 +1,14 @@
 // file: android/build.gradle.kts
 
 buildscript {
-    // Pastikan versi Kotlin ini sesuai dengan kebutuhan Anda dan versi yang digunakan di app/build.gradle.kts
-    ext.kotlin_version = "1.9.22" 
+    val kotlinVersion = "1.9.22" // Pindahkan ke dalam buildscript
     repositories {
         google()
         mavenCentral()
     }
-
     dependencies {
-        // Pastikan versi Gradle Plugin ini sesuai dengan Android Studio Anda
-        classpath("com.android.tools.build:gradle:8.4.1") 
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version")
+        classpath("com.android.tools.build:gradle:8.4.1")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
     }
 }
 

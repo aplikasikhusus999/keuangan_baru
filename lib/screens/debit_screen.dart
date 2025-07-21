@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:keuangan_baru/models/add_debit.dart'; // Import AddDebitScreen
 import 'package:supabase_flutter/supabase_flutter.dart'; // Import Supabase
 import 'dart:async'; // Import for StreamSubscription
+import 'package:intl/intl.dart'; // Import for DateFormat
 
 class DebitScreen extends StatefulWidget {
   const DebitScreen({super.key});
@@ -19,7 +20,6 @@ class _DebitScreenState extends State<DebitScreen> {
   // Daftar transaksi debit yang akan diisi dari Supabase secara realtime
   List<Map<String, dynamic>> _debitTransactions = [];
 
-  // FIX: Mengubah tipe dari Stream? menjadi StreamSubscription?
   StreamSubscription<List<Map<String, dynamic>>>?
       _debitTransactionsStreamSubscription;
 
@@ -31,7 +31,6 @@ class _DebitScreenState extends State<DebitScreen> {
 
   @override
   void dispose() {
-    // Membatalkan subscription saat widget di-dispose
     _debitTransactionsStreamSubscription?.cancel();
     super.dispose();
   }
@@ -46,21 +45,24 @@ class _DebitScreenState extends State<DebitScreen> {
             ascending: false) // Urutkan berdasarkan tanggal terbaru
         .listen(
           (List<Map<String, dynamic>> data) {
+            // Debug print: Lihat data yang diterima dari Supabase
+            print('Data diterima di DebitScreen stream: $data');
+
             setState(() {
-              _debitTransactions = data
-                  .map((item) => {
-                        'id': item['id'],
-                        'description': item['description'],
-                        'amount': (item['amount'] as num).toDouble(),
-                        'date': item['transaction_date']
-                            .toString()
-                            .substring(0, 10), // Ambil hanya tanggal
-                        'time': item['transaction_date']
-                            .toString()
-                            .substring(11, 16), // Ambil hanya waktu (HH:mm)
-                        // 'proof_url': item['proof_url'], // Tambahkan jika ada kolom bukti
-                      })
-                  .toList();
+              _debitTransactions = data.map((item) {
+                final DateTime transactionDateTime =
+                    DateTime.parse(item['transaction_date']);
+                return {
+                  'id': item['id'],
+                  'description': item['description'],
+                  'amount': (item['amount'] as num).toDouble(),
+                  'date': DateFormat('yyyy-MM-dd')
+                      .format(transactionDateTime), // Format tanggal
+                  'time': DateFormat('HH:mm')
+                      .format(transactionDateTime), // Format waktu
+                  // 'proof_url': item['proof_url'], // Tambahkan jika ada kolom bukti
+                };
+              }).toList();
               _calculateTotalDebit(); // Hitung ulang total debit
             });
           },
